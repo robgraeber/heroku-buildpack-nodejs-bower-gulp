@@ -1,5 +1,14 @@
-Heroku Buildpack for Node.js
-============================
+Heroku Buildpack for Node.js and gulp.js
+========================================
+
+EXPERIMENTAL
+
+Forked from [heroku-buildpack-nodejs](https://github.com/heroku/heroku-buildpack-nodejs).
+
+Heavily based on [heroku-buildpack-nodejs-grunt](https://github.com/mbuchetics/heroku-buildpack-nodejs-grunt).
+
+Original readme follows.
+
 
 This is the official [Heroku buildpack](http://devcenter.heroku.com/articles/buildpacks) for Node.js apps. If you fork this repository, please **update this README** to explain what your fork does and why it's special.
 
