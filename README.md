@@ -5,27 +5,30 @@ Usage
 -----
 
 - Set your Heroku app's buildpack URL to `https://github.com/appstack/heroku-buildpack-nodejs-gulp.git`. To be safe, you should really fork this and use your fork's URL.
-- Run `heroku labs:enable user-env-compile` to enable environment variable support
 - Run `heroku config:set NODE_ENV=production` to set your environment to `production` (or any other name)
-- Add a Gulp task called `heroku:production` that builds your app
-- Install the dependenies for serving the app: `npm install gzippo express --save`
-- Create a simple web server in the root called `web.js`:
+- Add a Gulp task called `heroku:<NODE_ENV>` that builds your app. For instance, if you followed the line above and set NODE_ENV to production, the name of this task would be `heroku:production`
 
-```
-var gzippo = require('gzippo');
-var express = require('express');
-var app = express();
-
-app.use(express.logger('dev'));
-app.use(gzippo.staticGzip("" + __dirname + "/build"));
-app.listen(process.env.PORT || 5000);
-```
-
-- Add a single line `Procfile` to the root to serve the app via node:
+- Add a single line `Procfile` to the root to serve your app via node. This example assumes that you have a `web.js` file in the root of your project:
 
 ```
 web: node web.js
 ```
+
+Things That Will Happen
+-----------------------
+
+When the buildpack runs it will do many things similarly to the standard [Heroku buildpack](https://github.com/heroku/heroku-buildpack-nodejs). In addition it will do the following things, not exactly in this order.
+
+- If `gulpfile.js` is found
+    - Run `npm update gulp` to install gulp locally during the build
+    - Run `gulp heroku:${NODE_ENV}` to build the app
+- If `bower.json` is found
+    - Extract the `directory` key from `.bowerrc` if that is present
+    - Run `npm update bower` to install bower locally
+    - Run `bower install` to install `bower_components`. 
+    - Cache `bower_components` or whichever alternate directory was specified in `.bowerrc`
+
+The bower component caching is very similar to the node_modules caching done for npm. The cache is restored before each build and `bower prune` is run to remove anything no longer needed before doing the `bower install`. This is the same way the standard buildpack handles caching.
 
 Credits
 -------
