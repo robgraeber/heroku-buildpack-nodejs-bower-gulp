@@ -75,16 +75,53 @@ elif test -d $cache_dir/node/node_modules; then
 
 fi
 
-# Scope config var availability only to `npm install`
+# Decide if we will be looking at bower dependencies as well
+if test -f $build_dir/bower.json; then
+  use_bower=yes
+
+  if test -f $build_dir/.bowerrc; then
+    bower_dir=$(cat $build_dir/.bowerrc | $bp_dir/vendor/jq -r .directory)
+    if [ "$bower_dir" == "null" ]; then
+      unset bower_dir
+    fi
+  fi
+  bower_dir=${bower_dir:=bower_components}
+
+  status "Found bower.json - Updating/Installing bower locally"
+  npm update bower | indent
+
+  # Copy cached bower_components back into the build tree and prune unless
+  # the directory is checked in already
+  if test -d $build/$bower_dir; then
+    status "Found existing $bower_dir directory; skipping bower cache"
+  elif test -d $cache_dir/node/bower_components; then
+    status "Restoring $bower_dir directory from cache"
+    cp -r $cache_dir/node/bower_components $build_dir/$bower_dir
+
+    status "Pruning cached dependencies no longer referenced in bower.json"
+    node_modules/.bin/bower prune 2>&1 | indent
+  fi
+
+fi
+
+
+
+
+# Scope config var availability only to `npm install` & `bower install`
 (
   if [ -d "$env_dir" ]; then
     status "Exporting config vars to environment"
     export_env_dir $env_dir
   fi
 
-  status "Installing dependencies"
+  status "Installing npm dependencies"
   # Make npm output to STDOUT instead of its default STDERR
   npm install --userconfig $build_dir/.npmrc --production 2>&1 | indent
+
+  if [ $use_bower ]; then
+    status "Installing bower dependencies"
+    node_modules/.bin/bower install | indent
+  fi
 )
 
 # Persist goodies like node-version in the slug
@@ -103,6 +140,14 @@ mkdir -p $cache_dir/node
 if test -d $build_dir/node_modules; then
   status "Caching node_modules directory for future builds"
   cp -r $build_dir/node_modules $cache_dir/node
+fi
+
+# Also cache a $bower_dir if present
+if [ $use_bower ]; then
+  if test -d $build_dir/$bower_dir; then
+    status "Caching $bower_dir directory for future builds"
+    cp -r $build_dir/$bower_dir $cache_dir/node
+  fi
 fi
 
 # Copy goodies to the cache
