@@ -190,8 +190,8 @@ echo "export PATH=\"\$HOME/vendor/node/bin:\$HOME/bin:\$HOME/node_modules/.bin:\
     status "Updating/Installing gulp locally"
     npm update gulp | indent
     
-    echo "-----> Found gulpfile, running gulp heroku:$NODE_ENV task"
-    $build_dir/node_modules/.bin/gulp heroku:$NODE_ENV
+    echo "-----> Found gulpfile, running gulp build task"
+    $build_dir/node_modules/.bin/gulp build
   else
     echo "-----> No gulpfile found"
   fi
