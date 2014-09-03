@@ -5,8 +5,7 @@ Usage
 -----
 
 - Set your Heroku app's buildpack URL to `https://github.com/appstack/heroku-buildpack-nodejs-gulp.git`. To be safe, you should really fork this and use your fork's URL.
-- Run `heroku config:set NODE_ENV=production` to set your environment to `production` (or any other name)
-- Add a Gulp task called `heroku:<NODE_ENV>` that builds your app. For instance, if you followed the line above and set NODE_ENV to production, the name of this task would be `heroku:production`
+- Add a Gulp task called `build` that builds your app. For instance, the command called would be "gulp build"
 
 - Add a single line `Procfile` to the root to serve your app via node. This example assumes that you have a `web.js` file in the root of your project:
 
