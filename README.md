@@ -4,7 +4,7 @@ Heroku Buildpack for Node.js and gulp.js
 Usage
 -----
 
-- Set your Heroku app's buildpack URL to `https://github.com/appstack/heroku-buildpack-nodejs-gulp.git`. To be safe, you should really fork this and use your fork's URL.
+- Set your Heroku app's buildpack URL to `https://github.com/robgraeber/heroku-buildpack-nodejs-bower-gulp.git`. To be safe, you should really fork this and use your fork's URL.
 - Add a Gulp task called `build` that builds your app. For instance, the command called would be "gulp build"
 
 - Add a single line `Procfile` to the root to serve your app via node. This example assumes that you have a `web.js` file in the root of your project:
