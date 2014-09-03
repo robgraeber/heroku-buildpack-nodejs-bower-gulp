@@ -1,4 +1,4 @@
-Heroku Buildpack for Node.js and gulp.js
+Heroku Buildpack for Node.js, Bower, and Gulp
 ========================================
 
 Usage
