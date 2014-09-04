@@ -136,33 +136,6 @@ mkdir -p $build_dir/.heroku
 # Save resolved node version in the slug for later reference
 echo $node_version > $build_dir/.heroku/node-version
 
-# Purge node-related cached content, being careful not to purge the top-level
-# cache, for the sake of heroku-buildpack-multi apps.
-rm -rf $cache_dir/node_modules # (for apps still on the older caching strategy)
-rm -rf $cache_dir/node
-mkdir -p $cache_dir/node
-
-# If app has a node_modules directory, cache it.
-if test -d $build_dir/node_modules; then
-  status "Caching node_modules directory for future builds"
-  cp -r $build_dir/node_modules $cache_dir/node
-fi
-
-# Also cache a $bower_dir if present
-if [ $use_bower ]; then
-  if test -d $build_dir/$bower_dir; then
-    status "Caching $bower_dir directory for future builds"
-    cp -r $build_dir/$bower_dir $cache_dir/node
-  fi
-fi
-
-# Copy goodies to the cache
-cp -r $build_dir/.heroku $cache_dir/node
-
-status "Cleaning up node-gyp and npm artifacts"
-rm -rf "$build_dir/.node-gyp"
-rm -rf "$build_dir/.npm"
-
 # If Procfile is absent, try to create one using `npm start`
 if [ ! -e $build_dir/Procfile ]; then
   npm_start=$(cat $build_dir/package.json | $bp_dir/vendor/jq -r .scripts.start)
@@ -208,6 +181,33 @@ echo "export PATH=\"\$HOME/vendor/node/bin:\$HOME/bin:\$HOME/node_modules/.bin:\
     echo "-----> No gulpfile found"
   fi
 )
+
+# Purge node-related cached content, being careful not to purge the top-level
+# cache, for the sake of heroku-buildpack-multi apps.
+rm -rf $cache_dir/node_modules # (for apps still on the older caching strategy)
+rm -rf $cache_dir/node
+mkdir -p $cache_dir/node
+
+# If app has a node_modules directory, cache it.
+if test -d $build_dir/node_modules; then
+  status "Caching node_modules directory for future builds"
+  cp -r $build_dir/node_modules $cache_dir/node
+fi
+
+# Also cache a $bower_dir if present
+if [ $use_bower ]; then
+  if test -d $build_dir/$bower_dir; then
+    status "Caching $bower_dir directory for future builds"
+    cp -r $build_dir/$bower_dir $cache_dir/node
+  fi
+fi
+
+# Copy goodies to the cache
+cp -r $build_dir/.heroku $cache_dir/node
+
+status "Cleaning up node-gyp and npm artifacts"
+rm -rf "$build_dir/.node-gyp"
+rm -rf "$build_dir/.npm"
 
 # Post package.json to nomnom service
 # Use a subshell so failures won't break the build.
