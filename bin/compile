@@ -57,11 +57,11 @@ cd $build_dir
 
 # If node_modules directory is checked into source control then
 # rebuild any native deps. Otherwise, restore from the build cache.
-if test -d $build_dir/node_modules; then
+if [ -d $build_dir/node_modules ]; then
   status "Found existing node_modules directory; skipping cache"
   status "Rebuilding any native dependencies"
   npm rebuild 2>&1 | indent
-elif test -d $cache_dir/node/node_modules; then
+elif [ -d $cache_dir/node/node_modules ]; then
   status "Restoring node_modules directory from cache"
   cp -r $cache_dir/node/node_modules $build_dir/
 
@@ -78,7 +78,7 @@ elif test -d $cache_dir/node/node_modules; then
     cp -r $cache_dir/node/node_modules/.bin/gulp $build_dir/node_modules/.bin
   fi
 
-  if test -f $cache_dir/node/.heroku/node-version && [ $(cat $cache_dir/node/.heroku/node-version) != "$node_version" ]; then
+  if [ -f $cache_dir/node/.heroku/node-version ] && [ $(cat $cache_dir/node/.heroku/node-version) != "$node_version" ]; then
     status "Node version changed since last build; rebuilding dependencies"
     npm rebuild 2>&1 | indent
   fi
@@ -86,10 +86,10 @@ elif test -d $cache_dir/node/node_modules; then
 fi
 
 # Decide if we will be looking at bower dependencies as well
-if test -f $build_dir/bower.json; then
+if [ -f $build_dir/bower.json ]; then
   use_bower=yes
 
-  if test -f $build_dir/.bowerrc; then
+  if [ -f $build_dir/.bowerrc ]; then
     bower_dir=$(cat $build_dir/.bowerrc | $bp_dir/vendor/jq -r .directory)
     if [ "$bower_dir" == "null" ]; then
       unset bower_dir
@@ -99,7 +99,7 @@ if test -f $build_dir/bower.json; then
 
   status "Found bower.json - Updating/Installing bower locally"
   
-  if [ test -f node_modules/.bin/bower ]; then
+  if [ -e node_modules/.bin/bower ]; then
     npm update bower 2>&1 | indent
   else
     npm install bower 2>&1 | indent
@@ -107,9 +107,9 @@ if test -f $build_dir/bower.json; then
 
   # Copy cached bower_components back into the build tree and prune unless
   # the directory is checked in already
-  if [ test -d $build/$bower_dir ]; then
+  if [ -d $build/$bower_dir ]; then
     status "Found existing $bower_dir directory; skipping bower cache"
-  elif [ test -d $cache_dir/node/bower_components ]; then
+  elif [ -d $cache_dir/node/bower_components ]; then
     status "Restoring $bower_dir directory from cache"
     cp -r $cache_dir/node/bower_components $build_dir/$bower_dir
 
@@ -182,7 +182,7 @@ echo "export PATH=\"\$HOME/vendor/node/bin:\$HOME/bin:\$HOME/node_modules/.bin:\
 
     # Install gulp locally
     status "Updating/Installing gulp locally"
-    if [ test -f node_modules/.bin/gulp ]; then
+    if [ -e node_modules/.bin/gulp ]; then
       npm update gulp 2>&1 | indent
     else
       npm install gulp 2>&1 | indent
@@ -203,14 +203,14 @@ rm -rf $cache_dir/node
 mkdir -p $cache_dir/node
 
 # If app has a node_modules directory, cache it.
-if test -d $build_dir/node_modules; then
+if [ -d $build_dir/node_modules ]; then
   status "Caching node_modules directory for future builds"
   cp -r $build_dir/node_modules $cache_dir/node
 fi
 
 # Also cache a $bower_dir if present
 if [ $use_bower ]; then
-  if test -d $build_dir/$bower_dir; then
+  if [ -d $build_dir/$bower_dir ]; then
     status "Caching $bower_dir directory for future builds"
     cp -r $build_dir/$bower_dir $cache_dir/node
   fi
