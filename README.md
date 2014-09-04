@@ -5,7 +5,7 @@ Usage
 -----
 
 - Create a new app using `heroku create --buildpack=https://github.com/robgraeber/heroku-buildpack-nodejs-bower-gulp.git`. To be safe, you should fork this and use your fork's URL.
-- Add a Gulp task called `build` that builds your app. For instance, the command called will be `gulp build`
+- Add a Gulp task called `build` that builds your app. For instance, the command called will be `gulp build`.
 - Add a `bower.json`/`.bowerrc` file that will be used with `bower install`. Packages not in `bower.json`are pruned each build.
 - And finally, the buildpack has a few default entry points. It will look for entry points in the following order:  
  - `Procfile`: e.g. `web: node server.js`.
