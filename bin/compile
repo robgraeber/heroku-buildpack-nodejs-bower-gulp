@@ -70,10 +70,12 @@ elif [ -d $cache_dir/node/node_modules ]; then
   
   #prune will delete the bower / gulp modules, this adds it back
   if [ -d $cache_dir/node/node_modules/bower ]; then
+    status "Copying over bower from cache"
     cp -r $cache_dir/node/node_modules/bower $build_dir/node_modules
     cp -r $cache_dir/node/node_modules/.bin/bower $build_dir/node_modules/.bin
   fi
   if [ -d $cache_dir/node/node_modules/gulp ]; then
+  status "Copying over gulp from cache"
     cp -r $cache_dir/node/node_modules/gulp $build_dir/node_modules
     cp -r $cache_dir/node/node_modules/.bin/gulp $build_dir/node_modules/.bin
   fi
@@ -97,7 +99,7 @@ if [ -f $build_dir/bower.json ]; then
   fi
   bower_dir=${bower_dir:=bower_components}
 
-  status "Found bower.json - Updating/Installing bower locally"
+  status "Found bower.json - Updating bower locally"
   
   if [ -e node_modules/.bin/bower ]; then
     npm update bower 2>&1 | indent
@@ -181,13 +183,12 @@ echo "export PATH=\"\$HOME/vendor/node/bin:\$HOME/bin:\$HOME/node_modules/.bin:\
     fi
 
     # Install gulp locally
-    status "Updating/Installing gulp locally"
+    status "Updating gulp locally"
     if [ -e node_modules/.bin/gulp ]; then
       npm update gulp 2>&1 | indent
     else
       npm install gulp 2>&1 | indent
     fi
-    npm install gulp 2>&1 | indent
     
     echo "-----> Found gulpfile, running gulp build task"
     $build_dir/node_modules/.bin/gulp build
@@ -219,7 +220,7 @@ fi
 # Copy goodies to the cache
 cp -r $build_dir/.heroku $cache_dir/node
 
-status "Cleaning up node-gyp and npm artifacts"
+#status "Cleaning up node-gyp and npm artifacts"
 rm -rf "$build_dir/.node-gyp"
 rm -rf "$build_dir/.npm"
 
