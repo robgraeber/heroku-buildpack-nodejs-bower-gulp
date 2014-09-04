@@ -88,7 +88,7 @@ if test -f $build_dir/bower.json; then
   bower_dir=${bower_dir:=bower_components}
 
   status "Found bower.json - Updating/Installing bower locally"
-  npm install bower | indent
+  npm install --save bower | indent
 
   # Copy cached bower_components back into the build tree and prune unless
   # the directory is checked in already
@@ -194,7 +194,7 @@ echo "export PATH=\"\$HOME/vendor/node/bin:\$HOME/bin:\$HOME/node_modules/.bin:\
 
     # Install gulp locally
     status "Updating/Installing gulp locally"
-    npm install gulp | indent
+    npm install --save gulp | indent
     
     echo "-----> Found gulpfile, running gulp build task"
     $build_dir/node_modules/.bin/gulp build
