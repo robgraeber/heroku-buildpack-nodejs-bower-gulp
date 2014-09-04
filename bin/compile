@@ -115,7 +115,7 @@ if [ -f $build_dir/bower.json ]; then
     status "Restoring $bower_dir directory from cache"
     cp -r $cache_dir/node/bower_components $build_dir/$bower_dir
 
-    status "Pruning cached dependencies no longer referenced in bower.json"
+    status "Pruning cached dependencies not specified in bower.json"
     node_modules/.bin/bower prune 2>&1 | indent
   fi
 
