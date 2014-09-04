@@ -70,12 +70,12 @@ elif [ -d $cache_dir/node/node_modules ]; then
   
   #prune will delete the bower / gulp modules, this adds it back
   if [ -d $cache_dir/node/node_modules/bower ]; then
-    status "Copying over bower from cache"
+    status "Copying bower from cache"
     cp -r $cache_dir/node/node_modules/bower $build_dir/node_modules
     cp -r $cache_dir/node/node_modules/.bin/bower $build_dir/node_modules/.bin
   fi
   if [ -d $cache_dir/node/node_modules/gulp ]; then
-  status "Copying over gulp from cache"
+  status "Copying gulp from cache"
     cp -r $cache_dir/node/node_modules/gulp $build_dir/node_modules
     cp -r $cache_dir/node/node_modules/.bin/gulp $build_dir/node_modules/.bin
   fi
@@ -213,7 +213,7 @@ fi
 if [ $use_bower ]; then
   if [ -d $build_dir/$bower_dir ]; then
     status "Caching $bower_dir directory for future builds"
-    cp -r $build_dir/$bower_dir $cache_dir/node
+    cp -r $build_dir/$bower_dir/. $cache_dir/node/bower_components
   fi
 fi
 
