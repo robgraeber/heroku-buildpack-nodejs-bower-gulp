@@ -67,6 +67,12 @@ elif test -d $cache_dir/node/node_modules; then
 
   status "Pruning cached dependencies not specified in package.json"
   npm prune 2>&1 | indent
+  
+  #prune will delete the bower / gulp modules, this adds it back
+  cp -r $cache_dir/node/node_modules/gulp $build_dir/node_modules
+  cp -r $cache_dir/node/node_modules/bower $build_dir/node_modules
+  cp -r $cache_dir/node/node_modules/.bin/gulp $build_dir/node_modules/.bin
+  cp -r $cache_dir/node/node_modules/.bin/bower $build_dir/node_modules/.bin
 
   if test -f $cache_dir/node/.heroku/node-version && [ $(cat $cache_dir/node/.heroku/node-version) != "$node_version" ]; then
     status "Node version changed since last build; rebuilding dependencies"
@@ -88,7 +94,7 @@ if test -f $build_dir/bower.json; then
   bower_dir=${bower_dir:=bower_components}
 
   status "Found bower.json - Updating/Installing bower locally"
-  npm install --save bower | indent
+  npm install bower 2>&1 | indent
 
   # Copy cached bower_components back into the build tree and prune unless
   # the directory is checked in already
@@ -120,7 +126,7 @@ fi
 
   if [ $use_bower ]; then
     status "Installing bower dependencies"
-    node_modules/.bin/bower install | indent
+    node_modules/.bin/bower install 2>&1 | indent
   fi
 )
 
@@ -194,7 +200,7 @@ echo "export PATH=\"\$HOME/vendor/node/bin:\$HOME/bin:\$HOME/node_modules/.bin:\
 
     # Install gulp locally
     status "Updating/Installing gulp locally"
-    npm install --save gulp | indent
+    npm install gulp 2>&1 | indent
     
     echo "-----> Found gulpfile, running gulp build task"
     $build_dir/node_modules/.bin/gulp build
