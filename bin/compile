@@ -98,13 +98,18 @@ if test -f $build_dir/bower.json; then
   bower_dir=${bower_dir:=bower_components}
 
   status "Found bower.json - Updating/Installing bower locally"
-  npm install bower 2>&1 | indent
+  
+  if [ test -f node_modules/.bin/bower ]; then
+    npm update bower 2>&1 | indent
+  elif
+    npm install bower 2>&1 | indent
+  fi
 
   # Copy cached bower_components back into the build tree and prune unless
   # the directory is checked in already
-  if test -d $build/$bower_dir; then
+  if [ test -d $build/$bower_dir ]; then
     status "Found existing $bower_dir directory; skipping bower cache"
-  elif test -d $cache_dir/node/bower_components; then
+  elif [ test -d $cache_dir/node/bower_components ]; then
     status "Restoring $bower_dir directory from cache"
     cp -r $cache_dir/node/bower_components $build_dir/$bower_dir
 
@@ -177,6 +182,11 @@ echo "export PATH=\"\$HOME/vendor/node/bin:\$HOME/bin:\$HOME/node_modules/.bin:\
 
     # Install gulp locally
     status "Updating/Installing gulp locally"
+    if [ test -f node_modules/.bin/gulp ]; then
+      npm update gulp 2>&1 | indent
+    elif
+      npm install gulp 2>&1 | indent
+    fi
     npm install gulp 2>&1 | indent
     
     echo "-----> Found gulpfile, running gulp build task"
