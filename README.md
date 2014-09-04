@@ -13,7 +13,7 @@ Usage
  - `server.js` file.
  - `app.js` file.
 
-Note: It will only use bower/gulp if `bower.json` or `gulpfile.js` is found. Otherwise it's usable the same as other Node.js buildpacks, except with more default entry points.
+Note: It will only use bower/gulp if `bower.json` or `gulpfile.js` is found. Otherwise it's usable the same as other Node.js buildpacks, except with extra entry points.
 
 Things That Will Happen
 -----------------------
