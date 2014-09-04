@@ -101,7 +101,7 @@ if test -f $build_dir/bower.json; then
   
   if [ test -f node_modules/.bin/bower ]; then
     npm update bower 2>&1 | indent
-  elif
+  else
     npm install bower 2>&1 | indent
   fi
 
@@ -184,7 +184,7 @@ echo "export PATH=\"\$HOME/vendor/node/bin:\$HOME/bin:\$HOME/node_modules/.bin:\
     status "Updating/Installing gulp locally"
     if [ test -f node_modules/.bin/gulp ]; then
       npm update gulp 2>&1 | indent
-    elif
+    else
       npm install gulp 2>&1 | indent
     fi
     npm install gulp 2>&1 | indent
