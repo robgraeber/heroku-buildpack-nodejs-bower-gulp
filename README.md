@@ -5,9 +5,13 @@ Usage
 -----
 
 - Create a new app using `heroku create --buildpack=https://github.com/robgraeber/heroku-buildpack-nodejs-bower-gulp.git`. To be safe, you should fork this and use your fork's URL.
-- Add a Gulp task called `build` that builds your app. For instance, the command called would be "gulp build"
-
-- And either use a single line `Procfile` like: `web: node server.js`. Or it will look for either a npm start script, server.js, or app.js file to run. 
+- Add a Gulp task called `build` that builds your app. For instance, the command called will be "gulp build"
+- Add a `bower.json`/`.bowerrc` file with all your front-end dependecies. Packages not in `bower.json`are pruned each build.
+- And finally, the buildpack has a few default entry points. It will look for entry points in the following order:  
+ 1. A `Procfile`: e.g. `web: node server.js`.
+ 2. An `npm start` script.
+ 3. A `server.js` file.
+ 4. A `app.js` file.
 
 
 Things That Will Happen
@@ -15,14 +19,18 @@ Things That Will Happen
 
 When the buildpack runs it will do many things similarly to the standard [Heroku buildpack](https://github.com/heroku/heroku-buildpack-nodejs). In addition it will do the following things, not exactly in this order.
 
+- If `bower.json` is found
+    - Extract the `directory` key from `.bowerrc` if that is present
+    - Run `npm install bower` to install bower locally
+    - Run `bower install` to install `bower_components`. 
+    - Cache `bower_components` or whichever alternate directory was specified in `.bowerrc`
 - If `gulpfile.js` is found
     - Run `npm install gulp` to install gulp locally during the build
     - Run `gulp build` to build the app
-- If `bower.json` is found
-    - Extract the `directory` key from `.bowerrc` if that is present
-    - Run `npm update bower` to install bower locally
-    - Run `bower install` to install `bower_components`. 
-    - Cache `bower_components` or whichever alternate directory was specified in `.bowerrc`
+- If `Procfile` is not found
+    - Looks for a `npm start` script
+    - Then for a `server.js` file
+    - And then for an `app.js` file
 
 The bower component caching is very similar to the node_modules caching done for npm. The cache is restored before each build and `bower prune` is run to remove anything no longer needed before doing the `bower install`. This is the same way the standard buildpack handles caching.
 
