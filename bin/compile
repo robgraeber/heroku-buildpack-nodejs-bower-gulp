@@ -163,7 +163,7 @@ if [ ! -e $build_dir/Procfile ]; then
 
   # If `scripts.start` is set in package.json, or a server.js file
   # is present in the app root, then create a default Procfile
-  if [ "$npm_start" != "null" ] || [ -f $build_dir/server.js ]; then
+  if [ "$npm_start" != "null" ]; then
     status "No Procfile found; Adding 'npm start' to new Procfile"
     echo "web: npm start" > $build_dir/Procfile
   elif  [ -f $build_dir/server.js ]; then
