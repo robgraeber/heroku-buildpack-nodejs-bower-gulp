@@ -35,10 +35,23 @@ When the buildpack runs it will do many things similarly to the standard [Heroku
 
 The bower component caching is very similar to the node_modules caching done for npm. The cache is restored before each build and `bower prune` is run to remove anything no longer needed before doing the `bower install`. This is the same way the standard buildpack handles caching.
 
+Some Useful Aliases
+-----------------------
+I also like to create some useful aliases that help me deploy in 1-line. (Add the following to your .bash_profile):
+```
+alias heroku-create='heroku create --buildpack=https://github.com/robgraeber/heroku-buildpack-nodejs-bower-gulp.git'
+autoDeploy() {
+  heroku create $1 $2 $3 --buildpack=https://github.com/robgraeber/heroku-buildpack-nodejs-bower-gulp.git
+  git push heroku master
+  heroku open
+}
+alias heroku-create-auto=autoDeploy
+alias heroku-portal='open https://dashboard.heroku.com/apps'
+alias heroku-push='git push heroku master; heroku open'
+```
+
 Credits
 -------
-
-Inspired by [Deploying a Yeoman/Angular app to Heroku](http://www.sitepoint.com/deploying-yeomanangular-app-heroku/).
 
 Forked from [heroku-buildpack-nodejs-gulp](https://github.com/timdp/heroku-buildpack-nodejs-gulp).
 
