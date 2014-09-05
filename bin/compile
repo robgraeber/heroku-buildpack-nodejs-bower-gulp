@@ -190,7 +190,6 @@ echo "export PATH=\"\$HOME/vendor/node/bin:\$HOME/bin:\$HOME/node_modules/.bin:\
       npm install gulp 2>&1 | indent
     fi
     
-    status "Found gulpfile, running gulp build task"
     if [ -n "$GULP_TASK" ]; then
       status "Found gulpfile, running gulp $GULP_TASK task"
       $build_dir/node_modules/.bin/gulp $GULP_TASK
