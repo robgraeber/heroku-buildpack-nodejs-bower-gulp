@@ -52,16 +52,19 @@ mv $build_dir/node-v$node_version-linux-x64 $build_dir/vendor/node
 chmod +x $build_dir/vendor/node/bin/*
 PATH=$PATH:$build_dir/vendor/node/bin
 
+vendor_dir="$build_dir/vendor2" #cached vendor dir
+
+status "Downloading and installing nasm"
 #Installing nasm from source
 NVERSION="2.11"
-curl http://www.nasm.us/pub/nasm/releasebuilds/$NVERSION/nasm-$NVERSION.tar.gz -s -o - | tar xvz
+curl http://www.nasm.us/pub/nasm/releasebuilds/$NVERSION/nasm-$NVERSION.tar.gz -s | tar xz
 cd nasm-$NVERSION
-./configure && make
+./configure && make 2>&1
 
-mkdir -p $build_dir/vendor/nasm/bin
-mv nasm $build_dir/vendor/nasm/bin
-chmod +x $build_dir/vendor/nasm/bin/*
-PATH=$PATH:$build_dir/vendor/nasm/bin
+mkdir -p $vendor_dir/nasm/bin
+mv nasm $vendor_dir/nasm/bin
+chmod +x $vendor_dir/nasm/bin/*
+PATH=$PATH:$vendor_dir/nasm/bin
 
 # Run subsequent node/npm commands from the build path
 cd $build_dir
