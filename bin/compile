@@ -59,7 +59,7 @@ status "Downloading and installing nasm"
 NVERSION="2.11"
 curl http://www.nasm.us/pub/nasm/releasebuilds/$NVERSION/nasm-$NVERSION.tar.gz -s | tar xz
 cd nasm-$NVERSION
-./configure && make > /dev/null
+./configure 2>&1 && make 2>&1
 
 mkdir -p $vendor_dir/nasm/bin
 mv nasm $vendor_dir/nasm/bin
