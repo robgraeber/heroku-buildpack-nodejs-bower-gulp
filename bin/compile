@@ -52,8 +52,27 @@ mv $build_dir/node-v$node_version-linux-x64 $build_dir/vendor/node
 chmod +x $build_dir/vendor/node/bin/*
 PATH=$PATH:$build_dir/vendor/node/bin
 
+echo "-----> Installing jpegtran"
+BUILD_DIR=$1
+VENDOR_DIR="vendor"
+OPTIPNG_DOWNLOAD_URL="https://github.com/yeoman/node-jpegtran-bin/raw/master/vendor/linux/x64/jpegtran"
+echo "OPTIPNG_DOWNLOAD_URL = " $OPTIPNG_DOWNLOAD_URL | indent
+
+cd $BUILD_DIR
+mkdir -p $VENDOR_DIR/jpegtran/bin
+cd $VENDOR_DIR
+curl -L --silent -o jpegtran/bin/jpegtran $OPTIPNG_DOWNLOAD_URL
+chmod +x jpegtran/bin/jpegtran
+
+echo "exporting PATH" | indent
+PROFILE_PATH="$BUILD_DIR/.profile.d/jpegtran.sh"
+mkdir -p $(dirname $PROFILE_PATH)
+echo 'export PATH="$PATH:vendor/jpegtran/bin"' >> $PROFILE_PATH
+
 # Run subsequent node/npm commands from the build path
 cd $build_dir
+
+
 
 # If node_modules directory is checked into source control then
 # rebuild any native deps. Otherwise, restore from the build cache.
