@@ -53,7 +53,7 @@ chmod +x $build_dir/vendor/node/bin/*
 PATH=$PATH:$build_dir/vendor/node/bin
 
 NVERSION="2.11"
-curl http://www.nasm.us/pub/nasm/releasebuilds/$NVERSION/nasm-$NVERSION.tar.bz2 -s -o - | tar xvz
+curl http://www.nasm.us/pub/nasm/releasebuilds/$NVERSION/nasm-$NVERSION.tar.gz -s -o - | tar xvz
 cd nasm-$NVERSION
 ./configure && make && make install && make spotless
 cd ..
