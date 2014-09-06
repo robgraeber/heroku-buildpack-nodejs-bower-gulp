@@ -55,16 +55,21 @@ PATH=$PATH:$build_dir/vendor/node/bin
 vendor_dir="$build_dir/vendor2" #cached vendor dir
 
 status "Downloading and installing nasm"
-#Installing nasm from source
-NVERSION="2.11"
-curl http://www.nasm.us/pub/nasm/releasebuilds/$NVERSION/nasm-$NVERSION.tar.gz -s | tar xz
-cd nasm-$NVERSION
-./configure >/dev/null 2>&1 && make >/dev/null 2>&1
-
-mkdir -p $vendor_dir/nasm/bin
-mv nasm $vendor_dir/nasm/bin
-chmod +x $vendor_dir/nasm/bin/*
+if [ -d $cache_dir/node/vendor/nasm ]; then
+  cp -r $cache_dir/node/nasm $vendor_dir
+else
+  #Installing nasm from source
+  NVERSION="2.11"
+  curl http://www.nasm.us/pub/nasm/releasebuilds/$NVERSION/nasm-$NVERSION.tar.gz -s | tar xz
+  cd nasm-$NVERSION
+  ./configure >/dev/null 2>&1 && make >/dev/null 2>&1
+  
+  mkdir -p $vendor_dir/nasm/bin
+  mv nasm $vendor_dir/nasm/bin
+  chmod +x $vendor_dir/nasm/bin/*
+fi
 PATH=$PATH:$vendor_dir/nasm/bin
+
 
 # Run subsequent node/npm commands from the build path
 cd $build_dir
@@ -236,6 +241,11 @@ if [ $use_bower ]; then
     status "Caching $bower_dir directory for future builds"
     cp -r $build_dir/$bower_dir/. $cache_dir/node/bower_components
   fi
+fi
+# Also cache any compiled dependencies
+if [ -d $vendor_dir ]; then
+  status "Caching vendor directory for future builds"
+  cp -r $vendor_dir/. $cache_dir/node/vendor
 fi
 
 # Copy goodies to the cache
