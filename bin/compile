@@ -59,7 +59,7 @@ cd nasm-$NVERSION
 ./configure && make
 
 mkdir -p $build_dir/vendor/nasm/bin
-mv nasm $build_dir/vendor/nasm
+mv nasm $build_dir/vendor/nasm/bin
 chmod +x $build_dir/vendor/nasm/bin/*
 PATH=$PATH:$build_dir/vendor/nasm/bin
 
