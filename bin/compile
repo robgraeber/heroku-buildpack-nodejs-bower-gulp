@@ -52,11 +52,16 @@ mv $build_dir/node-v$node_version-linux-x64 $build_dir/vendor/node
 chmod +x $build_dir/vendor/node/bin/*
 PATH=$PATH:$build_dir/vendor/node/bin
 
+#Installing nasm from source
 NVERSION="2.11"
 curl http://www.nasm.us/pub/nasm/releasebuilds/$NVERSION/nasm-$NVERSION.tar.gz -s -o - | tar xvz
 cd nasm-$NVERSION
-./configure && make && make install && make spotless
-cd ..
+./configure && make
+
+mkdir -p $build_dir/vendor/nasm/bin
+mv nasm $build_dir/vendor/nasm
+chmod +x $build_dir/vendor/nasm/bin/*
+PATH=$PATH:$build_dir/vendor/nasm/bin
 
 # Run subsequent node/npm commands from the build path
 cd $build_dir
