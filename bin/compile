@@ -56,7 +56,7 @@ vendor_dir="$build_dir/vendor2" #cached vendor dir
 
 status "Downloading and installing nasm"
 if [ -d $cache_dir/node/vendor/nasm ]; then
-  cp -r $cache_dir/node/nasm $vendor_dir
+  cp -r $cache_dir/node/vendor/nasm $vendor_dir
 else
   #Installing nasm from source
   NVERSION="2.11"
