@@ -52,20 +52,11 @@ mv $build_dir/node-v$node_version-linux-x64 $build_dir/vendor/node
 chmod +x $build_dir/vendor/node/bin/*
 PATH=$PATH:$build_dir/vendor/node/bin
 
-#Apt-get installs
-APT_CACHE_DIR="$cache_dir/apt/cache"
-APT_STATE_DIR="$cache_dir/apt/state"
-
-mkdir -p "$APT_CACHE_DIR/archives/partial"
-mkdir -p "$APT_STATE_DIR/lists/partial"
-
-APT_OPTIONS="-o debug::nolocking=true -o dir::cache=$APT_CACHE_DIR -o dir::state=$APT_STATE_DIR"
-
-#status "Updating apt caches"
-#apt-get $APT_OPTIONS update | indent
-
-status "Fetching .debs for nasm"
-apt-get $APT_OPTIONS -y install nasm | indent
+NVERSION="2.11"
+curl http://www.nasm.us/pub/nasm/releasebuilds/$NVERSION/nasm-$NVERSION.tar.bz2 | tar xvf nasm-$NVERSION.tar.bz2
+cd nasm-$NVERSION
+./configure && make && make install && make spotless
+cd ..
 
 # Run subsequent node/npm commands from the build path
 cd $build_dir
