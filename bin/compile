@@ -61,11 +61,11 @@ mkdir -p "$APT_STATE_DIR/lists/partial"
 
 APT_OPTIONS="-o debug::nolocking=true -o dir::cache=$APT_CACHE_DIR -o dir::state=$APT_STATE_DIR"
 
-status "Updating apt caches"
-apt-get $APT_OPTIONS update | indent
+#status "Updating apt caches"
+#apt-get $APT_OPTIONS update | indent
 
 status "Fetching .debs for nasm"
-apt-get $APT_OPTIONS -y -d install nasm | indent
+apt-get $APT_OPTIONS -y install nasm | indent
 
 # Run subsequent node/npm commands from the build path
 cd $build_dir
