@@ -54,8 +54,8 @@ PATH=$PATH:$build_dir/vendor/node/bin
 
 vendor_dir="$build_dir/vendor2" #cached vendor dir
 
-status "Downloading and installing nasm"
 if [ -d $cache_dir/node/vendor/nasm ]; then
+  status "Copying nasm from cache"
   cp -r $cache_dir/node/vendor/nasm $vendor_dir
 else
   status "Installing nasm from source"
