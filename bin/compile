@@ -58,7 +58,7 @@ status "Downloading and installing nasm"
 if [ -d $cache_dir/node/vendor/nasm ]; then
   cp -r $cache_dir/node/vendor/nasm $vendor_dir
 else
-  #Installing nasm from source
+  status "Installing nasm from source"
   NVERSION="2.11"
   curl http://www.nasm.us/pub/nasm/releasebuilds/$NVERSION/nasm-$NVERSION.tar.gz -s | tar xz
   cd nasm-$NVERSION
@@ -243,7 +243,7 @@ if [ $use_bower ]; then
   fi
 fi
 # Also cache any compiled dependencies
-if [ -d $vendor_dir ]; then
+if [ -e $vendor_dir ]; then
   status "Caching vendor directory for future builds"
   cp -r $vendor_dir/. $cache_dir/node/vendor
 fi
