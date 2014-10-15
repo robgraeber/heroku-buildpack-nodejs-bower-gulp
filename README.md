@@ -42,15 +42,20 @@ Some Useful Aliases
 -----------------------
 I also like to create some useful aliases that help me deploy in 1-line. (Add the following to your .bash_profile):
 ```
-alias heroku-create='heroku create --buildpack=https://github.com/robgraeber/heroku-buildpack-nodejs-bower-gulp.git'
-autoDeploy() {
-  heroku create $1 $2 $3 --buildpack=https://github.com/robgraeber/heroku-buildpack-nodejs-bower-gulp.git
-  git push heroku master
+heroku-push() {
+  git push heroku master $1 $2 $3
   heroku open
 }
-alias heroku-create-auto=autoDeploy
+heroku-create-auto() {
+  heroku create $1 $2 $3 --stack cedar-14 --buildpack=https://github.com/robgraeber/heroku-buildpack-nodejs-bower-gulp.git
+  herokuPush
+}
+alias heroku-create='heroku create --stack cedar-14 --buildpack=https://github.com/robgraeber/heroku-buildpack-nodejs-bower-gulp.git'
 alias heroku-portal='open https://dashboard.heroku.com/apps'
-alias heroku-push='git push heroku master; heroku open'
+alias heroku-set='heroku config:set'
+alias heroku-rebuild='heroku repo:rebuild'
+alias heroku-logs='heroku logs --tail'
+alias nmn='nodemon'
 ```
 
 Credits
