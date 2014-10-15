@@ -55,7 +55,6 @@ alias heroku-portal='open https://dashboard.heroku.com/apps'
 alias heroku-set='heroku config:set'
 alias heroku-rebuild='heroku repo:rebuild'
 alias heroku-logs='heroku logs --tail'
-alias nmn='nodemon'
 ```
 
 Credits
