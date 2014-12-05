@@ -46,7 +46,7 @@ heroku-push() {
   git push heroku master $1 $2 $3
   heroku open
 }
-heroku-create-auto() {
+heroku-auto-create() {
   heroku create $1 $2 $3 --stack cedar-14 --buildpack=https://github.com/robgraeber/heroku-buildpack-nodejs-bower-gulp.git
   heroku-push
 }
@@ -56,6 +56,7 @@ alias heroku-set='heroku config:set'
 alias heroku-rebuild='heroku repo:rebuild'
 alias heroku-logs='heroku logs --tail'
 ```
+Example: Type "heroku-auto-create myAppNameHere" to auto deploy in 1 line.
 
 Credits
 -------
