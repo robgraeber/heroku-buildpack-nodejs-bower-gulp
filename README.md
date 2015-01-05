@@ -36,7 +36,7 @@ When the buildpack runs it will do many things similarly to the standard [Heroku
 
 The bower component caching is very similar to the node_modules caching done for npm. The cache is restored before each build and `bower prune` is run to remove anything no longer needed before doing the `bower install`. This is the same way the standard buildpack handles caching.
 
-Bonus: Also installs 'nasm' which is a dependency for image minification libraries.
+Bonus: Also installs the latest npm + 'nasm' which is a dependency for imageMin.
 
 Some Useful Aliases
 -----------------------
