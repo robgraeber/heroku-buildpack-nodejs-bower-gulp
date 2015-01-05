@@ -46,6 +46,9 @@ heroku-push() {
   git push heroku master $1 $2 $3
   heroku open
 }
+heroku-delete() {
+  heroku apps:destroy -a $1 --confirm $1
+}
 heroku-auto-create() {
   heroku create $1 $2 $3 --buildpack=https://github.com/robgraeber/heroku-buildpack-nodejs-bower-gulp.git
   heroku-push
