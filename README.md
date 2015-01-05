@@ -47,7 +47,7 @@ heroku-push() {
   heroku open
 }
 heroku-auto-create() {
-  heroku create $1 $2 $3 --stack cedar-14 --buildpack=https://github.com/robgraeber/heroku-buildpack-nodejs-bower-gulp.git
+  heroku create $1 $2 $3 --buildpack=https://github.com/robgraeber/heroku-buildpack-nodejs-bower-gulp.git
   heroku-push
 }
 alias heroku-create='heroku create --stack cedar-14 --buildpack=https://github.com/robgraeber/heroku-buildpack-nodejs-bower-gulp.git'
