@@ -157,7 +157,7 @@ fi
 
   status "Installing npm dependencies"
   # Make npm output to STDOUT instead of its default STDERR
-  npm install --userconfig $build_dir/.npmrc 2>&1 | indent
+  npm install --production=false --userconfig $build_dir/.npmrc 2>&1 | indent
 
   if [ $use_bower ]; then
     status "Installing bower dependencies"
