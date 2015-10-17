@@ -90,7 +90,7 @@ elif [ -d $cache_dir/node/node_modules ]; then
   cp -r $cache_dir/node/node_modules $build_dir/
 
   status "Pruning cached dependencies not specified in package.json"
-  npm prune 2>&1 | indent
+  npm prune --production=false 2>&1 | indent
   
   #prune will delete the bower / gulp modules, this adds it back
   if [ -d $cache_dir/node/node_modules/bower ]; then
