@@ -19,9 +19,11 @@ trap cat_npm_debug_log ERR
 
 # Look in package.json's engines.node field for a semver range
 semver_range=$(cat $build_dir/package.json | $bp_dir/vendor/jq -r .engines.node)
+npm_semver_range=$(cat $build_dir/package.json | $bp_dir/vendor/jq -r .engines.npm)
 
 # Resolve node version using semver.io
 node_version=$(curl --silent --get --data-urlencode "range=${semver_range}" https://semver.io/node/resolve)
+npm_version=$(curl --silent --get --data-urlencode "range=${npm_semver_range}" https://semver.io/npm/resolve)
 
 # Recommend using semver ranges in a safe manner
 if [ "$semver_range" == "null" ]; then
@@ -52,8 +54,16 @@ mv $build_dir/node-v$node_version-linux-x64 $build_dir/vendor/node
 chmod +x $build_dir/vendor/node/bin/*
 PATH=$PATH:$build_dir/vendor/node/bin
 
+# Output info about requested range and resolved npm version
+if [ "$npm_semver_range" == "" ]; then
+  status "Defaulting to latest stable npm: $npm_version"
+else
+  status "Requested npm range:  $npm_semver_range"
+  status "Resolved npm version: $npm_version"
+fi
+
 status "Downloading and installing npm"
-npm install -g npm@latest > /dev/null 2>&1 | indent
+npm install -g npm@$npm_version > /dev/null 2>&1 | indent
 
 vendor_dir="$build_dir/vendor2" #cached vendor dir
 
@@ -66,7 +76,7 @@ else
   curl http://www.nasm.us/pub/nasm/releasebuilds/$NVERSION/nasm-$NVERSION.tar.gz -s | tar xz
   cd nasm-$NVERSION
   ./configure >/dev/null 2>&1 && make >/dev/null 2>&1
-  
+
   mkdir -p $vendor_dir/nasm/bin
   mv nasm $vendor_dir/nasm/bin
   chmod +x $vendor_dir/nasm/bin/*
@@ -91,7 +101,7 @@ elif [ -d $cache_dir/node/node_modules ]; then
 
   status "Pruning cached dependencies not specified in package.json"
   npm prune --production=false 2>&1 | indent
-  
+
   #prune will delete the bower / gulp modules, this adds it back
   if [ -d $cache_dir/node/node_modules/bower ]; then
     status "Copying bower from cache"
@@ -124,7 +134,7 @@ if [ -f $build_dir/bower.json ]; then
   bower_dir=${bower_dir:=bower_components}
 
   status "Found bower.json - Updating bower locally"
-  
+
   if [ -e node_modules/.bin/bower ]; then
     npm update bower 2>&1 | indent
   else
@@ -213,7 +223,7 @@ echo "export PATH=\"\$HOME/vendor/node/bin:\$HOME/bin:\$HOME/node_modules/.bin:\
     else
       npm install gulp 2>&1 | indent
     fi
-    
+
     if [ -n "$GULP_TASK" ]; then
       status "Found gulpfile, running gulp $GULP_TASK task"
       $build_dir/node_modules/.bin/gulp $GULP_TASK
